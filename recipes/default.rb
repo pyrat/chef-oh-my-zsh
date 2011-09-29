@@ -4,12 +4,13 @@
 #
 # Copyright 2011, Alastair Brunton
 # MIT License
-# 
+#
 #
 
 # Assumes that the user is already setup with zsh as their default shell
 
 node[:oh_my_zsh][:users].each do |zsh_user|
+  
   script "suck down oh-my-zsh" do
     interpreter "bash"
     user zsh_user
@@ -24,11 +25,18 @@ node[:oh_my_zsh][:users].each do |zsh_user|
   execute "Change the default style" do
     user zsh_user
     command <<-EOH
-      sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=\"gentoo\"/' /home/#{zsh_user}/.zshrc
+    sed -i 's/ZSH_THEME=\"robbyrussell\"/ZSH_THEME=\"gentoo\"/' /home/#{zsh_user}/.zshrc
     EOH
   end
-  
+
+  script "Turn off auto update functionality" do
+    user zsh_user
+    interpreter "zsh"
+    code <<-EOH
+    echo "\\nDISABLE_AUTO_UPDATE=\"true\"" >> /home/#{zsh_user}/.zshrc
+    touch /home/#{zsh_user}/.zshrc_update_disabled
+    EOH
+    not_if {File.exists?("/home/#{zsh_user}/.zshrc_update_disabled")}
+  end
+
 end
-
-
-
