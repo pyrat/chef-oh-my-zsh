@@ -33,8 +33,8 @@ node[:oh_my_zsh][:users].each do |zsh_user|
     user zsh_user
     interpreter "zsh"
     code <<-EOH
-    echo "\\nDISABLE_AUTO_UPDATE=\"true\"" >> /home/#{zsh_user}/.zshrc
-    touch /home/#{zsh_user}/.zshrc_update_disabled
+    echo "\\nDISABLE_AUTO_UPDATE=\"true\"" > /home/#{zsh_user}/.zshrc_update_disabled
+    cat /home/#{zsh_user}/.zshrc_update_disabled /home/#{zsh_user}/.zshrc > .zshrc
     EOH
     not_if {File.exists?("/home/#{zsh_user}/.zshrc_update_disabled")}
   end
