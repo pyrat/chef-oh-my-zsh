@@ -15,10 +15,10 @@ node[:oh_my_zsh][:users].each do |zsh_user|
     interpreter "bash"
     user zsh_user
     code <<-EOH
+    rm -fr /home/#{zsh_user}/.oh-my-zsh
     /usr/bin/env git clone https://github.com/robbyrussell/oh-my-zsh.git /home/#{zsh_user}/.oh-my-zsh
     mv /home/#{zsh_user}/.oh-my-zsh/templates/zshrc.zsh-template /home/#{zsh_user}/.zshrc
     EOH
-    not_if { File.directory? "/home/#{zsh_user}/.oh-my-zsh" }
   end
 
 
